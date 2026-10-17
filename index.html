@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CarbonQuest: Your Climate Twin</title>
+<style>
+:root{--bg:#f2f6f4;--card:#fff;--tx:#10212e;--mut:#5b6b76;--line:#d8e2de;--cool:#1f9d8b;--hot:#e4572e;--sun:#f5a524;--heat:#1f9d8b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0c1822;--card:#142431;--tx:#e8f0ee;--mut:#93a6b0;--line:#25394a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0c1822;--card:#142431;--tx:#e8f0ee;--mut:#93a6b0;--line:#25394a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(160deg,color-mix(in srgb,#7c3aed 16%,var(--bg)),var(--bg) 38%,color-mix(in srgb,#14b8a6 16%,var(--bg)) 100%);background-attachment:fixed;color:var(--tx);font:16px/1.55 "Segoe UI",system-ui,sans-serif}
+h1,h2,.big{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.01em}
+.wrap{max-width:1080px;margin:0 auto;padding:16px}
+.hero{border-radius:22px;padding:28px 22px;color:#fff;background:radial-gradient(circle at 85% 15%,var(--heat),transparent 55%),radial-gradient(circle at 8% 95%,#7c3aed,transparent 50%),radial-gradient(circle at 45% 0%,#0ea5e9,transparent 45%),#0b1020;transition:background .6s;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(30px,6vw,52px);margin:0 0 6px;line-height:1.05}
+.hero p{margin:0;max-width:560px;opacity:.9}
+.top{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:999px;padding:8px 14px}
+button:hover{border-color:var(--cool)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.hero button{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35)}
+.grid{display:grid;gap:16px;margin-top:16px;grid-template-columns:1fr}
+@media(min-width:860px){.grid{grid-template-columns:1fr 1fr}.full{grid-column:1/-1}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+.card h2{margin:0 0 12px;font-size:22px}
+label{display:block;margin:12px 0 4px;font-weight:600;font-size:14px}
+label span{float:right;color:var(--mut);font-weight:500}
+input[type=range]{width:100%;accent-color:var(--cool)}
+select{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--tx);font:inherit}
+.row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ring{position:relative;width:190px;height:190px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.big{font-size:44px;font-weight:700;line-height:1}
+.grade{display:inline-block;margin-top:6px;padding:2px 12px;border-radius:999px;color:#fff;background:var(--heat);font-weight:700}
+.bar{margin:10px 0}.bar b{display:flex;justify-content:space-between;font-size:14px;font-weight:600}
+.bar i{display:block;height:12px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:4px}
+.bar i u{display:block;height:100%;border-radius:99px;transition:width .6s}
+.donut{width:150px;height:150px;border-radius:50%;flex:none;transition:background .4s;-webkit-mask:radial-gradient(circle 46px,transparent 98%,#000 100%);mask:radial-gradient(circle 46px,transparent 98%,#000 100%)}
+.leg div{font-size:14px;margin:4px 0;display:flex;gap:8px;align-items:center}.leg em{width:12px;height:12px;border-radius:3px;flex:none}
+.act{display:flex;gap:12px;align-items:center;padding:10px 12px;margin:8px 0;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.act.on{border-color:var(--cool);background:color-mix(in srgb,var(--cool) 12%,transparent)}
+.act input{accent-color:var(--cool);width:18px;height:18px}.act small{color:var(--mut);display:block}
+.act strong{margin-left:auto;color:var(--cool);white-space:nowrap}
+.badges{display:flex;gap:8px;flex-wrap:wrap}.bd{padding:6px 12px;border-radius:999px;border:1px dashed var(--line);color:var(--mut);font-size:14px}
+.bd.won{border:1px solid var(--sun);color:var(--tx);background:color-mix(in srgb,var(--sun) 20%,transparent)}
+.chart{width:100%;height:auto;overflow:visible}.chart text{fill:var(--mut);font-size:11px}
+.note{color:var(--mut);font-size:13px}
+ol.src{padding-left:20px;font-size:14px;color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;opacity:0;transition:opacity .3s;pointer-events:none}
+.haz{height:10px;margin:18px -22px -28px;background:repeating-linear-gradient(-45deg,var(--heat) 0 14px,#0c1822 14px 28px);transition:background .6s}
+.threat{margin-top:18px;max-width:560px}.threat b{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:15px}
+.threat i{display:block;height:16px;border-radius:99px;background:rgba(255,255,255,.18);margin-top:6px;overflow:hidden}
+.threat u{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#1f9d8b,#f5a524,#e4572e,#b3122b);background-size:560px 100%;transition:width .6s}
+.hero.crit{animation:pulse 1.4s infinite}@keyframes pulse{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--hot) 35%,transparent)}}
+.planet{position:absolute;right:14px;top:14px;width:clamp(110px,22vw,190px);filter:drop-shadow(0 0 22px var(--heat))}
+.orb,.sat{transform-origin:60px 60px;animation:spin 36s linear infinite}.sat{animation-duration:7s}@keyframes spin{to{transform:rotate(360deg)}}
+.hero h1,.hero p{padding-right:clamp(120px,24vw,200px)}
+.hero h1{background:linear-gradient(90deg,#fff,#a5f3fc,#fde68a,#fbcfe8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero [data-p=student]{background:#0ea5e9;border-color:#0ea5e9}.hero [data-p=pro]{background:#7c3aed;border-color:#7c3aed}.hero [data-p=fly]{background:#f43f5e;border-color:#f43f5e}.hero [data-p=eco]{background:#10b981;border-color:#10b981}.hero #demo{background:#fbbf24;border-color:#fbbf24;color:#1a1200;font-weight:700}
+.card{border-top:5px solid var(--cc,#7c3aed);box-shadow:0 10px 26px -14px color-mix(in srgb,var(--cc,#7c3aed) 60%,transparent)}.card h2{color:var(--cc,var(--tx))}
+.grid .card:nth-child(1){--cc:#0ea5e9}.grid .card:nth-child(2){--cc:#f43f5e}.grid .card:nth-child(3){--cc:#f59e0b}.grid .card:nth-child(4){--cc:#10b981}.grid .card:nth-child(5){--cc:#7c3aed}.grid .card:nth-child(6){--cc:#64748b}
+#km,#mode{accent-color:#0ea5e9}#fl,#lf{accent-color:#6366f1}#kwh,#ppl{accent-color:#f59e0b}#shop{accent-color:#f43f5e}
+.act{border-left:6px solid var(--ac,#10b981)}#acts label:nth-child(1){--ac:#0ea5e9}#acts label:nth-child(2){--ac:#6366f1}#acts label:nth-child(3){--ac:#f59e0b}#acts label:nth-child(4){--ac:#84cc16}#acts label:nth-child(5){--ac:#ec4899}#acts label:nth-child(6){--ac:#14b8a6}#acts label:nth-child(7){--ac:#f43f5e}
+.bd.won{background:linear-gradient(90deg,#fde68a,#fbcfe8)!important;color:#1a1200;font-weight:700}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div class="wrap">
+<header class="hero" id="hero">
+<svg class="planet" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="sh" cx=".35" cy=".3"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient><clipPath id="cp"><circle cx="60" cy="60" r="38"/></clipPath></defs><circle cx="60" cy="60" r="47" fill="var(--heat)" opacity=".3"/><circle id="sea" cx="60" cy="60" r="38" fill="#1d6fd1"/><g clip-path="url(#cp)"><g class="orb"><path id="land" fill="#2fbf71" d="M30 40c10-12 22-6 26 4s-8 14-14 12-18 2-12-16zM66 66c10-6 24-2 22 10s-14 14-20 8-8-12-2-18zM74 34c6-4 14 0 12 8s-10 6-12 2zM22 74c6-4 12 0 10 6s-10 4-10-6z"/></g></g><circle cx="60" cy="60" r="38" fill="url(#sh)"/><g class="sat"><circle cx="60" cy="8" r="3" fill="#fff"/></g></svg>
+<h1>CarbonQuest</h1>
+<p>Build your climate twin. Move the sliders, watch your footprint heat up or cool down, then test real actions and see the 2050 pathway.</p>
+<div class="threat" id="threat"></div>
+<div class="top">
+<button data-p="student">Student</button><button data-p="pro">Metro professional</button><button data-p="fly">Frequent flyer</button><button data-p="eco">Eco champion</button>
+<button id="demo">Run judge demo</button><button id="theme">Light/dark</button>
+</div><div class="haz"></div></header>
+
+<div class="grid">
+<section class="card"><h2>Your lifestyle</h2>
+<label for="km">Commute distance <span id="v-km"></span></label><input type="range" id="km" min="0" max="400" step="5">
+<label for="mode">Commute mode</label><select id="mode"><option value="0.15">Petrol car</option><option value="0.16">Diesel car</option><option value="0.05">Electric car</option><option value="0.04">Motorbike or scooter</option><option value="0.03">Bus or metro</option><option value="0">Walk or cycle</option></select>
+<label for="fl">Short flights per year <span id="v-fl"></span></label><input type="range" id="fl" min="0" max="12">
+<label for="lf">Long flights per year <span id="v-lf"></span></label><input type="range" id="lf" min="0" max="6">
+<label for="kwh">Home electricity <span id="v-kwh"></span></label><input type="range" id="kwh" min="30" max="900" step="10">
+<label for="ppl">People sharing the home <span id="v-ppl"></span></label><input type="range" id="ppl" min="1" max="8">
+<label for="diet">Diet</label><select id="diet"><option value="0.9">Vegan</option><option value="1.2">Vegetarian</option><option value="1.8">Mixed</option><option value="2.8">Meat-heavy</option></select>
+<label for="shop">Monthly spending on goods <span id="v-shop"></span></label><input type="range" id="shop" min="0" max="30000" step="500">
+<label for="rec">Waste habits</label><select id="rec"><option value="0">Mostly landfill</option><option value="1">Recycle and compost</option></select>
+</section>
+
+<section class="card"><h2>Your footprint</h2>
+<div class="row"><div class="ring"><svg width="190" height="190" viewBox="0 0 130 130"><circle cx="65" cy="65" r="54" fill="none" stroke="var(--line)" stroke-width="12"/><circle id="arc" cx="65" cy="65" r="54" fill="none" stroke="var(--heat)" stroke-width="12" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="339.3" style="transition:stroke-dashoffset .6s,stroke .6s"/></svg>
+<div class="mid"><div class="big" id="tot">0</div><div class="note">tonnes CO₂e a year</div><div><span class="grade" id="grade">A</span></div></div></div>
+<div style="flex:1;min-width:200px"><p id="msg" style="margin-top:0"></p><p class="note" id="trees"></p></div></div>
+<div id="cmp" style="margin-top:12px"></div>
+</section>
+
+<section class="card"><h2>Where it comes from</h2>
+<div class="row"><div class="donut" id="donut"></div><div class="leg" id="leg"></div></div>
+<h2 style="margin-top:20px">Climate badges</h2><div class="badges" id="badges"></div>
+</section>
+
+<section class="card"><h2>Try real actions</h2><p class="note" style="margin-top:0">Tick an action to see how much it saves each year.</p><div id="acts"></div>
+<p><strong id="saved"></strong></p>
+</section>
+
+<section class="card full"><h2>The road to 2050</h2>
+<svg class="chart" id="chart" viewBox="0 0 640 240" role="img" aria-label="Footprint projection to 2050"></svg>
+<p class="note" id="chartnote"></p>
+<div class="top" style="margin-top:8px"><button id="share">Copy my result</button></div>
+</section>
+
+<section class="card full"><h2>Method and sources</h2>
+<p class="note" style="margin-top:0">CarbonQuest is an educational estimator. Factors are rounded averages for India and will differ from your exact case.</p>
+<ol class="src">
+<li>India grid factor about 0.71 kg CO₂ per kWh: Central Electricity Authority, CO₂ Baseline Database for the Indian Power Sector.</li>
+<li>Per-person emissions (India about 2 t, world about 4.7 t): Our World in Data, based on the Global Carbon Project.</li>
+<li>Per-person level consistent with a 1.5°C path by 2030, about 2.3 t: Hot or Cool Institute, 1.5-Degree Lifestyles report (2021).</li>
+<li>Transport and flight factors: UK DEFRA greenhouse gas conversion factors, adapted for Indian vehicles.</li>
+<li>Diet impact ranges: Poore and Nemecek, Science (2018); Scarborough et al., Climatic Change (2014).</li>
+<li>Climate science background: IPCC Sixth Assessment Report (2021–2023).</li>
+</ol>
+<p class="note">Limitations: no regional grid mix, no embodied emissions in housing, spending factor is a rough average. Future work: city-level data, bill upload and a mobile app.</p>
+</section>
+</div></div>
+<div id="toast" role="status"></div>
+<script>
+const $=id=>document.getElementById(id);
+const P={student:{km:30,mode:.04,fl:0,lf:0,kwh:120,ppl:4,diet:1.2,shop:2000,rec:0},
+pro:{km:120,mode:.15,fl:3,lf:1,kwh:350,ppl:3,diet:1.8,shop:12000,rec:0},
+fly:{km:200,mode:.16,fl:10,lf:5,kwh:700,ppl:2,diet:2.8,shop:25000,rec:0},
+eco:{km:40,mode:.03,fl:0,lf:0,kwh:100,ppl:4,diet:.9,shop:1500,rec:1}};
+const ids=["km","mode","fl","lf","kwh","ppl","diet","shop","rec"];
+const S={};const on={};
+const LAB=[["Travel","#1f9d8b"],["Flights","#6c8cff"],["Home energy","#f5a524"],["Food","#8bc34a"],["Goods and waste","#e4572e"]];
+const fmt=n=>n.toFixed(2);
+function read(){ids.forEach(i=>S[i]=+$(i).value)}
+function calc(s){const tr=s.km*52*s.mode/1000,fl=s.fl*.2+s.lf*1.6,hm=s.kwh*12*.71/1000/s.ppl,fd=s.diet,gd=s.shop*12/1000*.008+(s.rec?.15:.4);
+return[tr,fl,hm,fd,gd]}
+const ACTS=[
+["Switch commute to bus or metro","Cuts car and bike emissions to transit level",s=>s.mode>.03?s.km*52*(s.mode-.03)/1000:0,"a"],
+["Move to an electric vehicle","Works best on a cleaner grid; not stacked with transit",s=>on[0]?0:(s.mode>.05?s.km*52*(s.mode-.05)/1000:0),"b"],
+["Install rooftop solar","Covers about 70% of your home electricity",s=>s.kwh*12*.71/1000/s.ppl*.7],
+["Eat vegetarian 4 days a week","Shifts your diet toward vegetarian most of the week",s=>s.diet>1.2?(s.diet-1.2)*4/7:0],
+["Skip one short flight a year","Take a train or hold the meeting online",s=>s.fl>0?.2:0],
+["Buy less, buy second-hand","Cuts goods spending impact by 30%",s=>s.shop*12/1000*.008*.3],
+["Compost and recycle at home","Cuts waste emissions by 60%",s=>s.rec?0:.4*.6]];
+let cur=0,shown=0;
+function sav(s){return ACTS.reduce((a,x,i)=>a+(on[i]?x[2](s):0),0)}
+function update(){
+read();ids.forEach(i=>{});
+$("v-km").textContent=S.km+" km/week";$("v-fl").textContent=S.fl;$("v-lf").textContent=S.lf;$("v-kwh").textContent=S.kwh+" kWh/month";$("v-ppl").textContent=S.ppl;$("v-shop").textContent="₹"+S.shop.toLocaleString("en-IN");
+const p=calc(S),t=p.reduce((a,b)=>a+b,0);cur=t;
+const hue=Math.max(0,Math.min(1,(t-1.5)/6));const heat=`hsl(${Math.round(170-hue*165)},${70+hue*10}%,${42+hue*6}%)`;
+document.documentElement.style.setProperty("--heat",heat);
+$("land").setAttribute("fill",`hsl(${Math.round(140-hue*125)},62%,${46-hue*12}%)`);$("sea").setAttribute("fill",`hsl(${Math.round(212-hue*40)},72%,${46-hue*14}%)`);
+if(t<=2.3&&was>2.3&&!matchMedia("(prefers-reduced-motion:reduce)").matches)boom();was=t;
+$("arc").setAttribute("stroke-dashoffset",339.3*(1-Math.min(t/10,1)));
+const g=t<=2.3?["A","Paris-aligned. Excellent."]:t<=3.5?["B","Close to the 1.5°C pathway."]:t<=4.7?["C","Around the world average."]:t<=7?["D","Well above a safe pathway."]:["E","Very high. Big wins are available."];
+$("grade").textContent=g[0];$("msg").textContent=g[1]+" Your biggest source is "+LAB[p.indexOf(Math.max(...p))][0].toLowerCase()+".";
+$("trees").textContent="It takes about "+Math.ceil(t*1000/21)+" mature trees a year to absorb this (roughly 21 kg CO₂ per tree).";
+const L=t<=2.3?"SAFE":t<=3.5?"ELEVATED":t<=4.7?"HIGH":t<=7?"DANGEROUS":"CRITICAL";
+$("threat").innerHTML=`<b><span>Climate danger: ${L}</span><span>${(t/2.3).toFixed(1)}× the 1.5°C level</span></b><i><u style="width:${Math.min(t/10,1)*100}%"></u></i>`;
+$("hero").classList.toggle("crit",t>7);
+anim(t);
+const cm=[["You",t,"var(--heat)"],["India average",2.0,"#6c8cff"],["World average",4.7,"#8aa0ad"],["1.5°C target (2030)",2.3,"#1f9d8b"]];const mx=Math.max(...cm.map(c=>c[1]),1);
+$("cmp").innerHTML=cm.map(c=>`<div class="bar"><b><span>${c[0]}</span><span>${fmt(c[1])} t</span></b><i><u style="width:${c[1]/mx*100}%;background:${c[2]}"></u></i></div>`).join("");
+let a=0;const grad=p.map((v,i)=>{const s=a/t*360;a+=v;return`${LAB[i][1]} ${s}deg ${a/t*360}deg`}).join(",");
+$("donut").style.background=`conic-gradient(${grad})`;
+$("leg").innerHTML=p.map((v,i)=>`<div><em style="background:${LAB[i][1]}"></em>${LAB[i][0]}: ${fmt(v)} t (${Math.round(v/t*100)}%)</div>`).join("");
+acts();chart(t);badges(t);
+}
+function anim(t){const s=shown,st=performance.now();(function f(n){const k=Math.min((n-st)/600,1);shown=s+(t-s)*k;$("tot").textContent=fmt(shown);if(k<1)requestAnimationFrame(f)})(st)}
+function acts(){const n=Object.values(on).filter(Boolean).length;
+$("acts").innerHTML=ACTS.map((x,i)=>{const v=x[2](S);return`<label class="act ${on[i]?"on":""}"><input type="checkbox" data-i="${i}" ${on[i]?"checked":""}><span>${x[0]}<small>${x[1]}</small></span><strong>−${fmt(v)} t</strong></label>`}).join("");
+document.querySelectorAll("#acts input").forEach(c=>c.onchange=()=>{stopDemo();on[c.dataset.i]=c.checked;update()});
+const sv=Math.min(sav(S),cur*.95);$("saved").textContent=n?`With ${n} action${n>1?"s":""} you save ${fmt(sv)} t a year, down to ${fmt(cur-sv)} t. That equals skipping about ${Math.round(sv*1000/.15).toLocaleString("en-IN")} km in a petrol car.`:"No actions selected yet."}
+function chart(t){const sv=Math.min(sav(S),cur*.95),after=t-sv;const Y=[];for(let y=2026;y<=2050;y++)Y.push(y);
+const mx=Math.max(t,8)*1.1,X=y=>40+(y-2026)/24*580,V=v=>210-v/mx*190;
+const plan=Y.map(y=>Math.max(after*Math.pow(.97,Math.max(0,y-2031)),0.3)*(y<2031?1-(1-(after/t))*(y-2026)/5:1)*(y<2031?t/ t:1));
+const planV=Y.map(y=>{const k=y<2031?(y-2026)/5:1;const base=t-(t-after)*k;return base*(y>2031?Math.pow(.97,y-2031):1)});
+const path=a=>a.map((v,i)=>(i?"L":"M")+X(Y[i])+" "+V(v)).join("");
+let g="";for(let i=0;i<=4;i++){const v=mx*i/4;g+=`<line x1="40" x2="620" y1="${V(v)}" y2="${V(v)}" stroke="var(--line)"/><text x="6" y="${V(v)+4}">${v.toFixed(1)}</text>`}
+g+=[2026,2030,2040,2050].map(y=>`<text x="${X(y)-12}" y="232">${y}</text>`).join("");
+$("chart").innerHTML=g+`<line x1="40" x2="620" y1="${V(2.3)}" y2="${V(2.3)}" stroke="#1f9d8b" stroke-dasharray="5 4"/><text x="430" y="${V(2.3)-5}" style="fill:#1f9d8b">1.5°C level 2.3 t</text><path d="${path(Y.map(()=>t))}" fill="none" stroke="var(--hot)" stroke-width="3"/><path d="${path(planV)}" fill="none" stroke="var(--cool)" stroke-width="3"/><text x="44" y="14" style="fill:var(--hot)">Do nothing</text><text x="130" y="14" style="fill:var(--cool)">With your actions</text>`;
+const f=planV[24];$("chartnote").textContent=`By 2050 your pathway reaches about ${fmt(f)} t a year (actions applied by 2031, grid cleaning 3% a year). ${f<=2.3?"That is inside the 1.5°C level.":"Add more actions to get under 2.3 t."}`}
+function badges(t){const n=Object.values(on).filter(Boolean).length;
+const B=[["Below world average",t<4.7],["Paris-aligned",t<=2.3],["Action taker (3+)",n>=3],["Planet hero (all 7)",n>=7],["Green commuter",S.mode<=.03]];
+$("badges").innerHTML=B.map(b=>`<span class="bd ${b[1]?"won":""}">${b[1]?"★ ":""}${b[0]}</span>`).join("")}
+function toast(m){const e=$("toast");e.textContent=m;e.style.opacity=1;setTimeout(()=>e.style.opacity=0,1800)}
+function set(o){ids.forEach(i=>$(i).value=o[i]);update()}
+document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{stopDemo();set(P[b.dataset.p])});
+ids.forEach(i=>$(i).addEventListener("input",()=>{stopDemo();update()}));
+let dm=null;function stopDemo(){if(dm){clearInterval(dm);dm=null;$("demo").textContent="Run judge demo"}}
+$("demo").onclick=()=>{if(dm){stopDemo();return}
+const k=["student","pro","fly","eco"];let n=0;$("demo").textContent="Stop demo";const step=()=>{set(P[k[n%4]]);if(n%4==1){ACTS.forEach((_,i)=>on[i]=false);[0,2,3].forEach(i=>on[i]=true)}if(n%4==3)ACTS.forEach((_,i)=>on[i]=true);if(n%4==0)ACTS.forEach((_,i)=>on[i]=false);update();n++};step();dm=setInterval(step,3500)};
+$("theme").onclick=()=>{const r=document.documentElement,d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
+$("share").onclick=async()=>{const sv=Math.min(sav(S),cur*.95);const m=`My CarbonQuest footprint: ${fmt(cur)} t CO2e a year (grade ${$("grade").textContent}). With my chosen actions: ${fmt(cur-sv)} t.`;try{await navigator.clipboard.writeText(m);toast("Result copied")}catch(e){toast(m)}};
+let was=99;function boom(){for(let i=0;i<46;i++){const e=document.createElement("i");e.style.cssText=`position:fixed;left:${Math.random()*100}vw;top:-12px;width:8px;height:12px;background:hsl(${Math.random()*360},85%,55%);z-index:9;pointer-events:none;transition:transform 1.9s ease-in,opacity 1.9s`;document.body.appendChild(e);requestAnimationFrame(()=>{e.style.transform=`translate(${Math.random()*160-80}px,105vh) rotate(${Math.random()*720}deg)`;e.style.opacity=0});setTimeout(()=>e.remove(),2000)}}
+set(P.pro);
+</script></body></html>
